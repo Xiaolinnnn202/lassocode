@@ -217,10 +217,10 @@ adaptive_lasso <- function(X, Y, best_lambda) {
   #p <- ncol(X)
   
   # 拟合Lasso模型
-  #fit <- glmnet::glmnet(X, Y, alpha = 1, lambda = best_lambda, standardize = FALSE)
+  fit <- glmnet::glmnet(X, Y, alpha = 1, lambda = best_lambda, standardize = FALSE)
   
   # 获取参数估计值的绝对值
-  #beta_hat <- as.numeric(coef(fit))
+  beta_hat <- as.numeric(coef(fit))
   
   # 计算自适应权重向量
   w <- calculate_weight(beta_hat)
@@ -291,9 +291,6 @@ X <- as.matrix(data[,-1]);X
 # 令lambda=3.2911和gamma2=0.5，需要用5折交叉验证方法求出gamma3的值
 
 # 定义惩罚权重的方程,其中j为1~13,gamma为需要argmin的数
-#calculate_weight_MA <- function(j,beta_hat) {
-  #return(j^0.1/sqrt_abs_beta_hat)
-#}
 calculate_weight_MA <- function(j, gamma, sqrt_abs_beta_hat) {
   return(j^gamma/sqrt_abs_beta_hat)
 }
@@ -449,6 +446,7 @@ final_beta <- MA_adaptive_lasso(X, Y)
 # 输出拟合方程的系数
 print("Fitted coefficients:")
 print(final_beta)
+
 
 
 
