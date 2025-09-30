@@ -26,7 +26,7 @@ library(xts)
 library(quantmod)
 
 # 获取股票数据
-stock_data <- read.csv("C:/主修/大四下/毕业论文/table/000903perf.csv")
+stock_data <- read.csv("C:/__.csv")#这里填写你所引用的数据的文件路径
 stock_data
 # 响应变量
 y <- as.matrix(stock_data[,-1]);y
@@ -223,10 +223,9 @@ adaptive_lasso <- function(X, Y, best_lambda) {
   #beta_hat <- as.numeric(coef(fit))
   
   # 计算自适应权重向量
-  #w <- calculate_weight(beta_hat)
+  w <- calculate_weight(beta_hat)
   # 将向量中的 Inf 替换为 0
-  #w[is.infinite(w)] <- 0
-  w <- c(0.1370853, 0, 1.0286945, 13.5678035, 0, 8.7528663, 0, 13.7937005, 9.4700623, 11.6721756, 0, 0)
+  w[is.infinite(w)] <- 0
   
   # 定义目标函数
   objective_function <- function(beta, X, Y, w, lambda) {
@@ -283,7 +282,7 @@ print("Fitted coefficients:")
 print(final_beta)
 
 
-## MA Lasso
+## 改进后的Adaptive Lasso
 # 响应变量&自变量
 Y <- as.matrix(data[,1]);Y
 X <- as.matrix(data[,-1]);X
@@ -314,17 +313,16 @@ MA_adaptive_lasso <- function(X, Y) {
   #beta_hat <- as.numeric(c(0,-0.4166,-0.3751,-0.0906,0.0606,-0.0845,0.0056,-0.0918,1,0.0329,0.4037,0.5209))
   
   # 拟合Lasso模型
-#  fit <- glmnet::glmnet(X, Y, alpha = 1, lambda = lambda, standardize = FALSE)
+  fit <- glmnet::glmnet(X, Y, alpha = 1, lambda = lambda, standardize = FALSE)
   
   # 获取参数估计值的绝对值
-  #  beta_hat <- as.numeric(coef(fit))
-  #j <- c(1,2,3,4,5,6,7,8,1,1,2,3)
+  beta_hat <- as.numeric(coef(fit))
+  j <- c(1,2,3,4,5,6,7,8,1,1,2,3)
   # 计算自适应权重向量
-  #sqrt_abs_beta_hat <- sqrt(abs(beta_hat))
-  #w <- calculate_weight_MA(j, gamma, sqrt_abs_beta_hat)
-  w <- c(0.3347,0, 1.660517, 1.822379, 3.816295, 4.771563, 4.115160, 16.233636, 4.063382, 1.000000, 5.513178, 1.686839, 1.546447)  
+  sqrt_abs_beta_hat <- sqrt(abs(beta_hat))
+  w <- calculate_weight_MA(j, gamma, sqrt_abs_beta_hat)
   # 将向量中的 Inf 替换为 0
-  #w[is.infinite(w)] <- 0
+  w[is.infinite(w)] <- 0
   # 定义目标函数
   objective_function <- function(w ,beta, X, Y) {
     # 计算最小二乘估计值
@@ -451,6 +449,7 @@ final_beta <- MA_adaptive_lasso(X, Y)
 # 输出拟合方程的系数
 print("Fitted coefficients:")
 print(final_beta)
+
 
 
 
