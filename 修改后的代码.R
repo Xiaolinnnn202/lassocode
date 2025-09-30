@@ -112,8 +112,8 @@ for (i in 1:p) {
 print(residuals_lagged)
 
 
-# 假设 residuals 是你要导出的数据
-write.csv(residuals, file = "C:\\主修\\大四下\\毕业论文\\table\\111\\residuals11.csv", row.names = FALSE)
+# residuals 是你要导出的数据
+write.csv(residuals, file = "C:\\__.csv", row.names = FALSE)
 
 # 提取AR部分的数据
 # 假设你已经拟合了一个ARMA(8,3)模型到时间序列上，名为model
@@ -164,7 +164,7 @@ X <- cbind(X_A, X_B);X
 Y <- ts_data[1:n_selected,];Y
 
 ##导入处理好的ARMA数据
-data <- read.csv("C:/主修/大四下/毕业论文/table/111/ARMA(8,3).csv")
+data <- read.csv("C:/__.csv")
 data
 # 响应变量&自变量
 Y <- as.matrix(data[,1]);Y
@@ -300,17 +300,17 @@ calculate_weight_MA <- function(j, gamma, sqrt_abs_beta_hat) {
 
 # 将这列数据与原始的自变量数据框合并起来
 # 创建一列全部为 1 的数据
-#ones_column <- rep(1, nrow(X))
+ones_column <- rep(1, nrow(X))
 
 # 将这列数据与原始的自变量数据框合并起来
-#X <- cbind(ones_column, X)
+X <- cbind(ones_column, X)
 #用训练集定义ARMA的拟合方程
 MA_adaptive_lasso <- function(X, Y) {
   p <- ncol(X)
   
   # 初始化参数估计值
   beta <- rep(0, ncol(X))
-  #beta_hat <- as.numeric(c(0,-0.4166,-0.3751,-0.0906,0.0606,-0.0845,0.0056,-0.0918,1,0.0329,0.4037,0.5209))
+  
   
   # 拟合Lasso模型
   fit <- glmnet::glmnet(X, Y, alpha = 1, lambda = lambda, standardize = FALSE)
@@ -449,6 +449,7 @@ final_beta <- MA_adaptive_lasso(X, Y)
 # 输出拟合方程的系数
 print("Fitted coefficients:")
 print(final_beta)
+
 
 
 
